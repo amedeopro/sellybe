@@ -22,5 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/products', function(){
    $products = Product::with('category')->get();
 
-   return json_encode($products);
+   return response()->json($products);
 });
