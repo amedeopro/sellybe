@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,4 +27,12 @@ Route::get('/products', function(){
     }])->get();
 
    return response()->json($products);
+});
+
+
+Route::get('/categories', function(){
+
+    $categories = Category::all();
+
+    return response()->json($categories);
 });
