@@ -22,9 +22,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/products', function(){
 
-    $products = Product::with(['category' => function($query){
+    $query = Product::with(['category' => function($query){
         $query->select(['category_id as id', 'name']);
-    }])->get();
+    }])->get()->toArray();
+
+    $products = array('products' => $query);
 
    return response()->json($products);
 });
@@ -32,7 +34,9 @@ Route::get('/products', function(){
 
 Route::get('/categories', function(){
 
-    $categories = Category::all();
+    $query = Category::all()->toArray();
+
+    $categories = array('categories' => $query);
 
     return response()->json($categories);
 });
