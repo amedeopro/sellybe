@@ -16,4 +16,6 @@ class Category extends Model
         'price',
         'fidelityPoint',
     ];
+
+    protected $hidden = ['pivot'];
 }

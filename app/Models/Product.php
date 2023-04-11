@@ -13,6 +13,8 @@ class Product extends Model
         'name'
     ];
 
+    protected $hidden = ['pivot'];
+
 
     public function category()
     {

@@ -20,7 +20,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/products', function(){
-   $products = Product::with('category')->get();
+
+    $products = Product::with(['category' => function($query){
+        $query->select(['category_id as id', 'name']);
+    }])->get();
 
    return response()->json($products);
 });
