@@ -40,3 +40,14 @@ Route::get('/categories', function(){
 
     return response()->json($categories);
 });
+
+Route::get('/product_category/{id}', function($id){
+
+    $query = Product::whereHas('category', function($query) use ($id){
+        $query->where('category_id', $id);
+    })->get()->toArray();
+
+    $products = array('products' => $query);
+
+    return response()->json($products);
+});
