@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -20,6 +21,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('/auth/register', [AuthController::class, 'createUser']);
+Route::post('/auth/login', [AuthController::class, 'loginUser']);
+
 Route::get('/products', function(){
 
     $query = Product::with(['category' => function($query){
@@ -29,7 +33,7 @@ Route::get('/products', function(){
     $products = array('products' => $query);
 
    return response()->json($products);
-});
+})->middleware('auth:sanctum');
 
 
 Route::get('/categories', function(){
