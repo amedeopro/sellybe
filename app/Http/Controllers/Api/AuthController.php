@@ -41,10 +41,14 @@ class AuthController extends Controller
                 'password' => Hash::make($request->password)
             ]);
 
+            $user = User::where('email', $request->email)->first();
+
             return response()->json([
                 'status' => true,
                 'message' => 'User Created Successfully',
-                'token' => $user->createToken("API TOKEN")->plainTextToken
+                'token' => $user->createToken("API TOKEN")->plainTextToken,
+                'user_id' => $user->id,
+                'user_name' => $user->name
             ], 200);
 
         } catch (\Throwable $th) {
@@ -89,7 +93,9 @@ class AuthController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'User Logged In Successfully',
-                'token' => $user->createToken("API TOKEN")->plainTextToken
+                'token' => $user->createToken("API TOKEN")->plainTextToken,
+                'user_id' => $user->id,
+                'user_name' => $user->name
             ], 200);
 
         } catch (\Throwable $th) {

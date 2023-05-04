@@ -55,3 +55,38 @@ Route::get('/product_category/{id}', function($id){
 
     return response()->json($products);
 });
+
+Route::get('/orders', function(){
+
+    $query = \App\Models\Order::all()->toArray();
+
+    $orders = array('orders' => $query);
+
+    return response()->json($orders);
+
+})->middleware('auth:sanctum');
+
+Route::get('/orders/{order_id}', function($order_id){
+
+    $query = \App\Models\Order::where('id', $order_id)->with(['products'])->get()->toArray();
+
+    $order = array('order' => $query);
+
+    return response()->json($order);
+
+})->middleware('auth:sanctum');
+
+Route::get('/orders/user/{id}', function($id){
+
+    $query = \App\Models\Order::whereHas('user', function($query) use ($id){
+        $query->where('id', $id);
+    })
+        ->with(['products', 'user'])
+        ->get()
+        ->toArray();
+
+    $orderByUser = array('order_by_user' => $query);
+
+    return response()->json($orderByUser);
+
+})->middleware('auth:sanctum');
