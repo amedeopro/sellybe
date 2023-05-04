@@ -66,6 +66,28 @@ Route::get('/orders', function(){
 
 })->middleware('auth:sanctum');
 
+Route::post('/orders/add', function(Request $request){
+
+    $data = $request->all();
+
+    $order = new \App\Models\Order($data);
+
+    $order->save();
+
+    foreach ($data['products'] as $productData) {
+        $product = Product::find($productData['product_id']);
+        $order->products()->attach($product, [
+            'quantity' => $productData['quantity'],
+            'value' => $productData['value'],
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    }
+
+    return response()->json('Ordine creato correttamente');
+
+})->middleware('auth:sanctum');
+
 Route::get('/orders/{order_id}', function($order_id){
 
     $query = \App\Models\Order::where('id', $order_id)->with(['products'])->get()->toArray();
