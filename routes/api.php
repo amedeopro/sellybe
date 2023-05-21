@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,6 +24,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/auth/register', [AuthController::class, 'createUser']);
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
+Route::post('/auth/checktoken', function(){
+    $user = Auth::user();
+
+    if ($user) {
+        // Il token è valido ed esiste un utente autenticato
+        return response()->json(['message' => 'Token valido']);
+    } else {
+        // Il token non è valido o non esiste un utente autenticato
+        return response()->json(['message' => 'Token non valido'], 401);
+    }
+})->middleware('auth:sanctum');
 
 Route::get('/products', function(){
 
@@ -34,7 +46,6 @@ Route::get('/products', function(){
 
    return response()->json($products);
 })->middleware('auth:sanctum');
-
 
 Route::get('/categories', function(){
 
