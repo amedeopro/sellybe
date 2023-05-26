@@ -24,6 +24,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/auth/register', [AuthController::class, 'createUser']);
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
+
+Route::post('/auth/logout', function(Request $request){
+
+    $user = $request->user();
+    $user->tokens()->delete();
+
+    return response()->json(['message' => 'Logged out successfully']);
+
+})->middleware('auth:sanctum');
+
 Route::post('/auth/checktoken', function(){
     $user = Auth::user();
 
