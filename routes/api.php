@@ -24,7 +24,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/auth/register', [AuthController::class, 'createUser']);
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
-
 Route::post('/auth/logout', function(Request $request){
 
     $user = $request->user();
@@ -33,7 +32,6 @@ Route::post('/auth/logout', function(Request $request){
     return response()->json(['message' => 'Logged out successfully']);
 
 })->middleware('auth:sanctum');
-
 Route::post('/auth/checktoken', function(){
     $user = Auth::user();
 
@@ -46,6 +44,7 @@ Route::post('/auth/checktoken', function(){
     }
 })->middleware('auth:sanctum');
 
+
 Route::get('/products', function(){
 
     $query = Product::with(['category' => function($query){
@@ -56,15 +55,6 @@ Route::get('/products', function(){
 
    return response()->json($products);
 })->middleware('auth:sanctum');
-
-Route::get('/categories', function(){
-
-    $query = Category::all()->toArray();
-
-    $categories = array('categories' => $query);
-
-    return response()->json($categories);
-});
 
 Route::get('/product_category/{id}', function($id){
 
@@ -77,6 +67,17 @@ Route::get('/product_category/{id}', function($id){
     return response()->json($products);
 });
 
+
+Route::get('/categories', function(){
+
+    $query = Category::all()->toArray();
+
+    $categories = array('categories' => $query);
+
+    return response()->json($categories);
+});
+
+
 Route::get('/orders', function(){
 
     $query = \App\Models\Order::all()->toArray();
@@ -84,28 +85,6 @@ Route::get('/orders', function(){
     $orders = array('orders' => $query);
 
     return response()->json($orders);
-
-})->middleware('auth:sanctum');
-
-Route::post('/orders/add', function(Request $request){
-
-    $data = $request->all();
-
-    $order = new \App\Models\Order($data);
-
-    $order->save();
-
-    foreach ($data['products'] as $productData) {
-        $product = Product::find($productData['product_id']);
-        $order->products()->attach($product, [
-            'quantity' => $productData['quantity'],
-            'value' => $productData['value'],
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-    }
-
-    return response()->json('Ordine creato correttamente');
 
 })->middleware('auth:sanctum');
 
@@ -131,5 +110,27 @@ Route::get('/orders/user/{id}', function($id){
     $orderByUser = array('order_by_user' => $query);
 
     return response()->json($orderByUser);
+
+})->middleware('auth:sanctum');
+
+Route::post('/orders/add', function(Request $request){
+
+    $data = $request->all();
+
+    $order = new \App\Models\Order($data);
+
+    $order->save();
+
+    foreach ($data['products'] as $productData) {
+        $product = Product::find($productData['product_id']);
+        $order->products()->attach($product, [
+            'quantity' => $productData['quantity'],
+            'value' => $productData['value'],
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    }
+
+    return response()->json('Ordine creato correttamente');
 
 })->middleware('auth:sanctum');

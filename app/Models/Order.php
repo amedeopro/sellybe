@@ -19,6 +19,7 @@ class Order extends Model
       'privacy',
       'payed',
       'processed',
+      'total'
     ];
 
     public function products()
