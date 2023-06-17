@@ -104,8 +104,7 @@ Route::get('/orders/user/{id}', function($id){
         $query->where('id', $id);
     })
         ->with(['products' => function($query){
-            $query->select('products.*', 'op.quantity as quantity')
-                ->join('order_product as op', 'products.id', '=', 'op.product_id');
+            $query->select('products.*', 'order_product.quantity as quantity');
         }, 'user'])
         ->get()
         ->toArray();
