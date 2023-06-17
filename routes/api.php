@@ -103,7 +103,10 @@ Route::get('/orders/user/{id}', function($id){
     $query = \App\Models\Order::whereHas('user', function($query) use ($id){
         $query->where('id', $id);
     })
-        ->with(['products', 'user'])
+        ->with(['products' => function($query){
+            $query->select('products.*', 'op.quantity as quantity')
+                ->join('order_product as op', 'products.id', '=', 'op.product_id');
+        }, 'user'])
         ->get()
         ->toArray();
 
