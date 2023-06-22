@@ -126,11 +126,11 @@ Route::post('/orders/add', function(Request $request){
 
 
     foreach ($data['products'] as $productData) {
-        $product = Product::find($productData['product_id']);
+        $product = Product::find($productData['id']);
 
         $order->products()->attach($product, [
-            'order_id' => $order->id,
-            'product_id' => $productData['id'],
+            //'order_id' => $order->id,
+            //'product_id' => $productData['id'],
             'quantity' => $productData['quantity'],
             'value' => $productData['total'],
         ]);
