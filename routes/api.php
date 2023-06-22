@@ -123,13 +123,14 @@ Route::post('/orders/add', function(Request $request){
 
     $order->save();
 
+
+
     foreach ($data['products'] as $productData) {
         $product = Product::find($productData['product_id']);
+
         $order->products()->attach($product, [
             'quantity' => $productData['quantity'],
             'value' => $productData['value'],
-            'created_at' => now(),
-            'updated_at' => now(),
         ]);
     }
 
